@@ -15,7 +15,7 @@ The Html version allows to browse the agda code without the need to install Agda
 
 Download the files in
 [link](agdaCode/html/)
-to your local directory
+to your local directory.
 Then load from there
 	rup.loadAllRup.html
-which loads the files of the Rup checker in sequence
+which loads the files of the Rup checker in sequence.
