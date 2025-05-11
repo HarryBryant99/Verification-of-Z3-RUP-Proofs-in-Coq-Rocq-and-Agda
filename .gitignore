@@ -1,0 +1,24 @@
+*.agdai
+MAlonzo/**
+_build/**
+
+# ignore emacs backup files
+*~
+\#*
+.\#*
+
+# latex generated files
+*.aux
+*.bbl
+*.blg
+*.lof
+*.log
+*.vtc
+*.aux.bak
+*.lot
+*.out
+*.ptb
+*.toc
+
+# agdai files
+*.agdai
