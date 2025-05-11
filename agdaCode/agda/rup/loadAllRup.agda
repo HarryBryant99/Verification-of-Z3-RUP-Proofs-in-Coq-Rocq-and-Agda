@@ -6,4 +6,3 @@ open import rup.variables
 open import rup.clause
 open import rup.model
 open import rup.uResTreeProofs
-open import rup.rupChecker
