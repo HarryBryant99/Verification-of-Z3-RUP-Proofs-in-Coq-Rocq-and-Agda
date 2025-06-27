@@ -2,6 +2,7 @@
 This git repository contains 
 - the Agda code used in the short article Harry Bryant, Andrew Lawrence, Monika Seisenberger, and Anton Setzer: Verifying Z3 RUP proofs with the interactive theorem provers Coq/Rocq and Agda which appeared in the abstracts of [Types 2025](https://msp.cis.strath.ac.uk/types2025/)
 - Rocq code for a RUP checker. This extends the preliminary code used in the Types 2025 paper and is used for future submissions.
+- The railway case study example used in the RSSRail 2025 paper
 
 ## Agda Code
 The agda code is in
