@@ -585,6 +585,8 @@ Proof .
   assumption .
 Qed.
 
+
+
 (*--------------------------------------------------------------------------*)
 
 Definition processClausesaux (c : option Clause)(ih : list Clause) : list Clause :=
@@ -1522,7 +1524,7 @@ Proof.
   intros.
   unfold iteratePropagator, iteratePropagatorProof.
   + assumption.
-  + intros. 
+  + intros.
     rewrite iteratePropagatorProofRewrite1.
     rewrite iteratePropagatorRewrite1.
     apply selectAndRunPropagatorCorrect.
@@ -2498,9 +2500,9 @@ Lemma  notbandb'impliesor :
 Proof.
 intros.
 destruct b.
-unfold andb in H0.
+unfold andb in H.
 destruct b'.
-unfold IsTrue in H0.
+unfold IsTrue in H.
 contradiction.
 right.
 simpl.
@@ -2515,9 +2517,9 @@ Lemma booltopropNegb : forall (b : bool),
 Proof.
   intros.
   destruct b.
-  simpl in H0.
+  simpl in H.
   assumption.
-  simpl in H1.
+  simpl in H0.
   assumption.
 Qed.
 
@@ -2536,7 +2538,7 @@ Proof.
 intros.
 destruct b.
 simpl.
-simpl in H0.
+simpl in H.
 contradiction.
 simpl.
 auto.
@@ -2549,8 +2551,8 @@ Lemma bImplModelsEmptyImpliesNotbaux : forall (b : bool)(m : Model),
     ->   IsTrue b -> False.
 Proof.
   intros.
-  apply H0 in H1.
-  apply emptyClauseNotModelled in H1.
+  apply H in H0.
+  apply emptyClauseNotModelled in H0.
   assumption.
 Qed.
 
@@ -2559,7 +2561,7 @@ Lemma bImplModelsEmptyImpliesNotb : forall (b : bool)(m : Model),
     ->   IsTrue (negb b).
 Proof.
   intros.
-  pose proof (bImplModelsEmptyImpliesNotbaux b m H0) as H0a.
+  pose proof (bImplModelsEmptyImpliesNotbaux b m H) as H0a.
   destruct b.
   simpl in H0a.
   contradiction.
@@ -2573,8 +2575,8 @@ Lemma m_doesn't_model_falsity :
   False.
 Proof.
 intros.
-unfold Models_clause in H0.
-unfold models_clause in H0.
+unfold Models_clause in H.
+unfold models_clause in H.
 contradiction.
 Qed.
 
@@ -2603,9 +2605,9 @@ unfold Models_formula in *.
 simpl.
 apply IsTrue_and_reverse.
 split.
-unfold models_formula in H1.
-apply IsTrue_and in H1.
-destruct H1 as [H0L H0R].
+unfold models_formula in H0.
+apply IsTrue_and in H0.
+destruct H0 as [H0L H0R].
 assumption.
 assumption.
 Qed.
@@ -2619,7 +2621,7 @@ intros.
 
 unfold not.
 intros.
-apply modelsAandC with m A c in H0.
+apply modelsAandC with m A c in H1.
 contradiction.
 assumption.
 Qed.
@@ -2809,7 +2811,7 @@ Proof.
     unfold Models_clause.
     unfold In in HinB.
     destruct HinB.
-    rewrite <- H0.
+    rewrite <- H.
     assumption.
     contradiction.
   - (* Case: xs is in A *)
@@ -3070,16 +3072,6 @@ Qed.
 
 (* Function to transform a clause into a list of clauses with negated literals *)
 
-Lemma m_doesn't_model_falsity :
-  forall (m : Model),
-  Models_clause m [] ->
-  False.
-Proof.
-intros.
-unfold Models_clause in H.
-unfold models_clause in H.
-contradiction.
-Qed.
 
 (*Lemma 3*)
 Lemma entailsFalsity : forall (A : Formula) (xs : Clause),
