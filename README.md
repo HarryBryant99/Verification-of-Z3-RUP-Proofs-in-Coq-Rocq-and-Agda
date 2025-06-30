@@ -6,7 +6,7 @@ This git repository contains
   Harry Bryant, Andrew Lawrence, Monika Seisenberger, and Anton Setzer: Verifying Z3 RUP proofs with the interactive theorem provers Coq/Rocq and Agda, which appeared in the abstracts of TYPES 2025. [Types 2025](https://msp.cis.strath.ac.uk/types2025/)
 - In
   [link](agdaCode/vers1Types2025Workshop/html/)
-  an html version of the Agda code
+  an html version of the Agda code.
   In order to view it download that directory and load from a webbrowser the file
   [link](agdaCode/vers1Types2025Workshop/html/loadAll.html)
   which loads the respective agda files
@@ -17,11 +17,10 @@ This git repository contains
   [link](agdaCode/vers2/)
   a checker for Z3 proofs of propositional formulas
 - In
-  [link](Rocq/) a RUP checker developed in Rocq is given.
-  This creates an extracted checker for formulas in CNF and a checker which checks proofs with propositional formulae,
-  and uses in case of Rup the extracted Rup checker.
+  [link](Rocq/) a RUP checker developed in Rocq.
+  This tool generates an extracted checker for formulas in CNF and a proof checker for propositional formulae. In the case of RUP, it uses the extracted RUP checker.
 - In
-  [link](createProofLogs/) scripts for creating the prooflogs are given.
+  [link](createProofLogs/) scripts for generating the proof logs.
 
 # Note on use of operating system
 This code has been developed using Linux
