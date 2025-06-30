@@ -3,16 +3,16 @@
 (set-option :solver.proof.log rhdr_romney_sands.smt2)
 
 ;; Define signals for the tracks
-(declare-fun s0 () Bool)  ; Signal for New Romney to Romney Sands
-(declare-fun s1 () Bool)  ; Signal for Romney Sands to New Romney
-(declare-fun s2 () Bool)  ; Signal for Dungeness to Romney Sands
-(declare-fun s3 () Bool)  ; Signal for Romney Sands to Dungeness
+(declare-fun s0 () Bool)  ; Signal for A to B
+(declare-fun s1 () Bool)  ; Signal for B to A
+(declare-fun s2 () Bool)  ; Signal for C to B
+(declare-fun s3 () Bool)  ; Signal for B to C
 
 ;; Define tracks and loops
-(declare-fun track_NR () Bool)  ; Track between New Romney and Romney Sands
-(declare-fun track_RD () Bool)  ; Track between Romney Sands and Dungeness
-(declare-fun loop_track_1 () Bool) ; Loop track 1 at Romney Sands
-(declare-fun loop_track_2 () Bool) ; Loop track 2 at Romney Sands
+(declare-fun track_NR () Bool)  ; Track between A and B
+(declare-fun track_RD () Bool)  ; Track between B and C
+(declare-fun loop_track_1 () Bool) ; Loop track 1 at B
+(declare-fun loop_track_2 () Bool) ; Loop track 2 at B
 
 ;; Define points at each end of the loop
 (declare-fun p0 () Bool)  ; Point 1 for the loop track
