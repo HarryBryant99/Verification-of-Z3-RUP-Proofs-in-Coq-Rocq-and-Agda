@@ -1,0 +1,33 @@
+tseitin(Not(Implies(x, y)), Not(x), y) [] [Not(x), y, Not(Implies(x, y))]
+tseitin(x, Implies(x, y)) [] [x, Implies(x, y)]
+tseitin(Not(y), Implies(x, y)) [] [Not(y), Implies(x, y)]
+tseitin(Not(Implies(y, x)), Not(y), x) [] [x, Not(y), Not(Implies(y, x))]
+tseitin(y, Implies(y, x)) [] [y, Implies(y, x)]
+tseitin(Not(x), Implies(y, x)) [] [Not(x), Implies(y, x)]
+tseitin(Not(And(Implies(x, y), Implies(y, x), x, Not(y))),
+        Implies(x, y)) [] [Implies(x, y),
+ Not(And(Implies(x, y), Implies(y, x), x, Not(y)))]
+tseitin(Not(And(Implies(x, y), Implies(y, x), x, Not(y))),
+        Implies(y, x)) [] [Implies(y, x),
+ Not(And(Implies(x, y), Implies(y, x), x, Not(y)))]
+tseitin(Not(And(Implies(x, y), Implies(y, x), x, Not(y))),
+        x) [] [x, Not(And(Implies(x, y), Implies(y, x), x, Not(y)))]
+tseitin(Not(And(Implies(x, y), Implies(y, x), x, Not(y))),
+        Not(y)) [] [Not(y), Not(And(Implies(x, y), Implies(y, x), x, Not(y)))]
+tseitin(Not(Implies(x, y)),
+        Not(Implies(y, x)),
+        Not(x),
+        y,
+        And(Implies(x, y), Implies(y, x), x, Not(y))) [] [Not(x),
+ y,
+ Not(Implies(x, y)),
+ Not(Implies(y, x)),
+ And(Implies(x, y), Implies(y, x), x, Not(y))]
+assumption [] [And(Implies(x, y), Implies(y, x), x, Not(y)), z]
+assumption [] [Not(z)]
+rup [] [And(Implies(x, y), Implies(y, x), x, Not(y))]
+rup [] [Implies(x, y)]
+rup [] [Implies(y, x)]
+rup [] [x]
+rup [] [Not(y)]
+rup [] []

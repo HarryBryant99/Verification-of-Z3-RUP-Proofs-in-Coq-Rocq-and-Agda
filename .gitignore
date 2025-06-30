@@ -22,3 +22,11 @@ _build/**
 
 # agdai files
 *.agdai
+Rocq/RupProofChecker.cmi
+Rocq/RupProofChecker.cmo
+Rocq/parserFull
+Rocq/parserFullProofsWithExtractedRupChecker.cmi
+Rocq/parserFullProofsWithExtractedRupChecker.cmo
+parserCNF
+Rocq/parserCNFfullyExtractedFromRocq.cmi
+Rocq/parserCNFfullyExtractedFromRocq.cmo
