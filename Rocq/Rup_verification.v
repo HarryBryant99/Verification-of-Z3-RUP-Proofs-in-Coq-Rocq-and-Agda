@@ -3580,7 +3580,7 @@ Qed.
 
 
 
-(* ------------------ NOT FOR GIT ------------------------------- *)
+(* ------------------ Test Cases ------------------------------- *)
 Definition anton_tseitinExample12 : RupProof :=
      [ (ass' [ pos "a" ; pos "b"; pos "c" ]) ;
         (ass' [ neg "a" ]) ;
