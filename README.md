@@ -16,4 +16,20 @@ This git repository contains
   [link](agdaCode/vers2/)
   a checker for Z3 proofs of propositional formulas
 - In
-  [link](Rocq/) a RUP checker. This extends the preliminary code used in the Types 2025 paper together with an extracted checker for formulas in CNF and a checker which checks proofs with propositional formulae, and uses in case of Rup the extracted Rup checker.
+  [link](Rocq/) a RUP checker developed in Rocq is given.
+  This creates an extracted checker for formulas in CNF and a checker which checks proofs with propositional formulae,
+  and uses in case of Rup the extracted Rup checker.
+- In
+  [link](createProofLogs/) scripts for creating the prooflogs are given.
+
+# Note on use of operating system
+This code has been developed using Linux
+- Sometimes during the development process we had problems with files in dos format.
+  We haven't discovered it in the final version but it might still occur.
+  If it occurs converting a file from dos to unix (e.g. using dos2unix) can fix that problem.
+- The shell scripts in
+  [link](createProofLogs/)
+  is for the bash shell of Linux.
+  You can either convert it to the termainl/shell/powershell
+  of your operating system using tools available online,
+  or run the commands given in the README.txt file manually.
