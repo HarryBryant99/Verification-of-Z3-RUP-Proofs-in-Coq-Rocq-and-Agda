@@ -1,7 +1,3 @@
-(set-option :sat.euf true)
-(set-option :tactic.default_tactic smt)
-(set-option :solver.proof.log rhdr_romney_sands.smt2)
-
 ;; Define signals for the tracks
 (declare-fun s0 () Bool)  ; Signal for A to B
 (declare-fun s1 () Bool)  ; Signal for B to A
