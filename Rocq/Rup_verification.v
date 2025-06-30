@@ -20,6 +20,7 @@ Unit Propagation
 
 (* Importing necessary libraries *)
 Require Import Coq.Lists.List.
+Import ListNotations.
 Require Import Coq.Strings.String.
 Require Import Coq.Bool.Bool.
 Import ListNotations.
@@ -1896,12 +1897,31 @@ Fixpoint models_formula (m : Model) (f : Formula) : bool :=
   | h :: t => andb (models_clause m h) (models_formula m t)
   end.
 
+Lemma models_formula_eq :
+  forall (m : Model)(c : Clause)(f : Formula),
+    models_formula m (c :: f) = andb (models_clause m c) (models_formula m f).
+Proof.
+  intros.
+  reflexivity.
+Qed.
+
 (* Define the function IsTrue *)
 Definition IsTrue (b : bool) : Prop :=
   match b with
   | true => True
   | false => False
   end.
+
+
+Lemma IsTrue2EqTrue : forall (b : bool), IsTrue b -> b = true.
+Proof.
+intros b H0.
+destruct b.
+reflexivity.
+unfold IsTrue in H0.
+contradiction.
+Qed.
+
 
 Definition Models_literal (m : Model) (l : Literal) : Prop :=
   IsTrue (models_literal m l).
@@ -1914,8 +1934,11 @@ Definition Models_formula (m : Model) (f : Formula) : Prop :=
 
 Definition entails (f : Formula) (c : Clause) : Prop :=
   (forall (m : Model),
-    Models_formula m f -> Models_clause m c).
+      Models_formula m f -> Models_clause m c).
 
+Definition entailsF (f : Formula) (f' : list Clause) : Prop :=
+  (forall (m : Model),
+    Models_formula m f -> Models_formula m f').
 Lemma nth_error_nil :
   forall (A : Type) (n : nat),
     nth_error (@nil A) n = None.
@@ -1935,6 +1958,23 @@ Proof.
   - destruct b.
     + simpl. apply I.
     + simpl in H. destruct a; simpl in H; contradiction.
+Qed.
+
+Lemma IsTrue_and' : forall a b : bool,
+    a && b = true -> IsTrue a /\ IsTrue b.
+Proof.
+  intros a b H.
+  destruct a.
+  destruct b.
+  split.
+  exact I.
+  exact I.
+  split.
+  exact I.
+  unfold andb in H.
+  discriminate H.
+  unfold andb in H.
+  discriminate H.
 Qed.
 
 Lemma head_clause_models :
@@ -3160,7 +3200,6 @@ apply CorrectOpenTreeProofEquiv2.
 apply  RUP_CheckerProofCorrect.
 Qed.
 
-
 (* Main Theorem *)
 Lemma RUP_Checker_correct :
   forall (a : Assumption)(c : Clause),
@@ -3217,3 +3256,436 @@ Definition as0 : Assumption := [tc0; tc1].
 Definition tp0 : list TreeProof := [ass 0; ass 1].
 
 Compute unitPropagationAndCheckWithAssProof H.
+
+Inductive RupProofStep  : Type :=
+| ass'  : Clause -> RupProofStep
+| rup' : Clause -> RupProofStep.
+
+Definition RupProof : Type := list RupProofStep.
+
+Fixpoint rupProof2Assumptions (pl : RupProof) : list Clause :=
+  match pl with
+  | [] => []
+  | (p :: pl) =>
+      match p with
+      | ass' c => c :: rupProof2Assumptions pl
+      | rup' c => rupProof2Assumptions pl
+      end
+  end.
+
+Definition rupProof2AssumptionsRevFirst (pl : RupProof) : list Clause :=
+     rupProof2Assumptions (rev pl).
+
+Lemma rupProof2AssumptionsEqass :
+  forall (c : Clause)(pl : RupProof),
+    rupProof2Assumptions ((ass' c) :: pl) = c :: rupProof2Assumptions pl.
+Proof.
+  intros.
+  reflexivity.
+Qed.
+
+
+Lemma rupProof2AssumptionsEqrup :
+  forall (c : Clause)(pl : RupProof),
+    rupProof2Assumptions ((rup' c) :: pl) = rupProof2Assumptions pl.
+Proof.
+  intros.
+  reflexivity.
+Qed.
+
+
+Fixpoint rupProof2Conclusions (pl : RupProof) : list Clause :=
+  match pl with
+  | [] => []
+  | (p :: pl) =>
+      match p with
+      | ass' c => c :: rupProof2Conclusions pl
+      | rup' c => c :: rupProof2Conclusions pl
+      end
+  end.
+
+Definition rupProof2ConclusionsRevFirst (pl : RupProof) : list Clause :=
+     rupProof2Conclusions (rev pl).
+
+Lemma rupProof2ConclusionsEqass :
+  forall (c : Clause)(pl : RupProof),
+    rupProof2Conclusions ((ass' c) :: pl) = c :: rupProof2Conclusions pl.
+Proof.
+  intros.
+  reflexivity.
+Qed.
+
+
+Lemma rupProof2ConclusionsEqrup :
+  forall (c : Clause)(pl : RupProof),
+    rupProof2Conclusions ((rup' c) :: pl) = c :: rupProof2Conclusions pl.
+Proof.
+  intros.
+  reflexivity.
+Qed.
+
+
+
+Fixpoint rupProofChecker (pl : RupProof) : bool :=
+  match pl with
+  | [] => true
+  | (p :: pl) =>
+      match p with
+      | ass' c => rupProofChecker pl
+      | rup' c => RUP_Checker (rupProof2Conclusions pl) c &&
+                    rupProofChecker pl
+      end
+  end.
+
+(* as rupProofChecker but reverts first the list since
+   the input files need to be read in reverse order
+   since they are processed by Rocq from the inside (last element first) *)
+
+Definition rupProofCheckerRevFirst (pl : RupProof) : bool :=
+   rupProofChecker (rev pl).
+
+Lemma rupProofCheckerEqass :
+  forall (c : Clause)(pl : RupProof),
+    rupProofChecker ((ass' c)  :: pl) = rupProofChecker pl.
+Proof.
+  intros.
+  reflexivity.
+Qed.
+
+Lemma rupProofCheckerEqrup :
+  forall (c : Clause)(pl : RupProof),
+    rupProofChecker ((rup' c)  :: pl) =
+        RUP_Checker (rupProof2Conclusions pl) c &&
+                    rupProofChecker pl.
+Proof.
+  intros.
+  reflexivity.
+Qed.
+
+
+
+Lemma RUProofCheckerCorrect1 :
+  forall  (pl : RupProof),
+    rupProofChecker pl = true -> entailsF (rupProof2Assumptions pl)
+                                   (rupProof2Conclusions pl).
+Proof.
+  intros pl q.
+  induction pl.
+  unfold rupProof2Assumptions.
+  unfold rupProof2Conclusions.
+  unfold entailsF.
+  intros.
+  assumption.
+  induction a.
+  rewrite (rupProof2AssumptionsEqass c pl).
+  rewrite (rupProof2ConclusionsEqass c pl).
+  unfold entailsF.
+  intros.
+  unfold Models_formula.
+  rewrite (models_formula_eq  m c  (rupProof2Conclusions pl)).
+  apply IsTrue_and_reverse.
+  split.
+  rewrite (rupProofCheckerEqass c pl) in q.
+  apply IHpl in q.
+  unfold entailsF in q.
+  unfold Models_formula in H0.
+  rewrite (models_formula_eq m c (rupProof2Assumptions pl)) in H0.
+  apply IsTrue_and in H0.
+  destruct H0 as [H01 H02].
+  assumption.
+  unfold Models_formula.
+  rewrite (rupProofCheckerEqass c pl) in q.
+  apply IHpl in q.
+  unfold entailsF in q.
+  unfold Models_formula in H0.
+  rewrite (models_formula_eq m c (rupProof2Assumptions pl)) in H0.
+  apply IsTrue_and in H0.
+  destruct H0 as [H01 H02].
+  unfold entailsF in IHpl.
+  specialize (q m).
+  apply q in H02.
+  assumption.
+  rewrite (rupProof2AssumptionsEqrup c pl).
+  rewrite (rupProof2ConclusionsEqrup c pl).
+  unfold entailsF.
+  intros.
+  unfold Models_formula.
+  rewrite (models_formula_eq  m c  (rupProof2Conclusions pl)).
+  apply IsTrue_and_reverse.
+  split.
+  rewrite (rupProofCheckerEqrup c pl) in q.
+  apply IsTrue_and' in q.
+  destruct q as [q0 q1].
+  apply IsTrue2EqTrue in q0.
+  apply RUP_Checker_correct in q0.
+  unfold entails in q0.
+  specialize (q0 m).
+  apply IsTrue2EqTrue in q1.
+  apply IHpl in q1.
+  unfold entailsF in q1.
+  specialize (q1 m).
+  apply q1 in H0.
+  apply q0 in H0.
+  unfold Models_clause in H0.
+  assumption.
+  unfold Models_clause in H0.
+  rewrite (rupProofCheckerEqrup c pl) in q.
+  apply IsTrue_and' in q.
+  destruct q as [q0 q1].
+  apply IsTrue2EqTrue in q1.
+  apply IHpl in q1.
+  unfold entailsF in q1.
+  specialize (q1 m).
+  apply q1 in H0.
+  unfold Models_formula in H0.
+  assumption.
+Qed.
+
+
+Definition IsEmpty  (c : Clause ) : bool :=
+  match c with
+  | [] => true
+  | (x :: c) => false
+  end.
+
+
+Fixpoint ContainsEmpty (l : list Clause) : bool :=
+  match l with
+  | [] => false
+  | (c :: l) => IsEmpty c || ContainsEmpty l
+  end.
+
+Lemma ContainsEmpty_Eqempty :
+  forall (l : list Clause) ,    ContainsEmpty ([] :: l) = true.
+Proof.
+  intros l.
+  reflexivity.
+Qed.
+
+Lemma ContainsEmpty_EqNonEmpty :
+  forall (l : Literal)(c : Clause)(f : list Clause) ,
+  ContainsEmpty ((l :: c) :: f) = ContainsEmpty f.
+Proof.
+  intros c l.
+  reflexivity.
+Qed.
+
+
+
+Definition rupProofCheckerUnsat (pl : RupProof) : bool :=
+  rupProofChecker pl && ContainsEmpty (rupProof2Conclusions pl).
+
+
+(* as rupProofCheckerUnSat but reverts first the list since
+   the input files need to be read in reverse order
+   since they are processed by Rocq from the inside (last element first) *)
+
+Definition rupProofCheckerUnsatRevFirst (pl : RupProof) : bool :=
+   rupProofCheckerUnsat (rev pl).
+
+
+Definition UnsatClause (c : Clause): Prop :=
+  forall (m : Model), not (Models_clause m c).
+
+Definition UnSatFor (f : Formula): Prop :=
+  forall (m : Model), not (Models_formula m f).
+
+
+Lemma transferEntailsFUnsat :
+  forall (f f' : Formula),
+    entailsF f f' -> UnSatFor f' -> UnSatFor f.
+Proof.
+  intros f f' ff' notf'.
+  unfold entailsF in ff'.
+  unfold UnSatFor in notf'.
+  unfold UnSatFor.
+  intros m mf.
+  specialize (ff' m).
+  specialize (notf' m).
+  apply ff' in mf.
+  apply notf' in mf.
+  assumption.
+Qed.
+
+Lemma unsatEmtpyClause : UnsatClause [].
+Proof.
+  unfold UnsatClause.
+  intros m p.
+  unfold Models_clause  in p.
+  unfold models_clause  in p.
+  contradiction.
+Qed.
+
+Lemma UnSatForEqNonEmptyHead :
+  forall (a : Literal)(a0 : Clause)(f : Formula),
+    UnSatFor f -> UnSatFor ((a :: a0) :: f).
+Proof.
+  intros.
+  unfold UnSatFor.
+  intros m mf.
+  unfold UnSatFor in H0.
+  specialize (H0 m).
+  unfold Models_formula in mf.
+  rewrite  models_formula_eq in mf.
+  apply IsTrue_and in mf.
+  destruct mf as [mf0 mf1].
+  unfold Models_formula in H0.
+  contradiction.
+Qed.
+
+
+Lemma unsatFormulaWithEmpty :
+  forall (f : Formula),
+    ContainsEmpty f = true -> UnSatFor f.
+Proof.
+  intros f p.
+  induction f.
+  unfold UnSatFor.
+  intros m q.
+  unfold ContainsEmpty in p.
+  discriminate p.
+  induction a.
+  unfold UnSatFor.
+  intros m q.
+  unfold Models_formula in q.
+  rewrite (models_formula_eq m [] f) in q.
+  apply IsTrue_and in q.
+  destruct q as [q0 q1].
+  unfold models_clause in q0.
+  unfold IsTrue in q0.
+  contradiction.
+  (* p : ContainsEmpty ((a :: a0) :: f) = true *)
+  rewrite ContainsEmpty_EqNonEmpty in p.
+  apply IHf in p.
+  apply UnSatForEqNonEmptyHead.
+  assumption.
+Qed.
+
+Lemma RupProofcheckerUnSat :
+  forall (pl : RupProof), rupProofCheckerUnsat pl = true
+                          -> UnSatFor (rupProof2Assumptions pl).
+Proof.
+  intros pl checktrue.
+  unfold rupProofCheckerUnsat in checktrue.
+  apply IsTrue_and' in checktrue.
+  destruct checktrue as [ check1 check2 ].
+  apply IsTrue2EqTrue in check1.
+  apply RUProofCheckerCorrect1 in check1.
+  apply IsTrue2EqTrue in check2.
+  apply unsatFormulaWithEmpty in check2.
+  apply (transferEntailsFUnsat (rupProof2Assumptions pl) (rupProof2Conclusions pl)).
+  assumption.
+  assumption.
+Qed.
+
+
+
+(* ------------------ NOT FOR GIT ------------------------------- *)
+Definition anton_tseitinExample12 : RupProof :=
+     [ (ass' [ pos "a" ; pos "b"; pos "c" ]) ;
+        (ass' [ neg "a" ]) ;
+        (ass' [ neg "b" ]) ;
+        (ass' [ neg "c" ]) ;
+        (rup' []) ].
+
+Compute (rupProofCheckerRevFirst  anton_tseitinExample12).
+Compute (rupProofCheckerUnsatRevFirst  anton_tseitinExample12).
+
+Definition anton_tseitinExample13 : RupProof :=
+      [ (ass' [ (neg "a" ) ; pos "b" ]);
+        (ass' [ (neg "b" ) ; pos "c" ]);
+        (ass' [ (neg "c" ) ; pos "d" ]) ;
+        (ass' [ neg "a" ; neg "d" ]);
+        (ass' [ pos "a" ; pos "b" ]);
+        (ass' [ neg "d" ; pos "a" ]);
+        (rup' [ pos "b" ]);
+        (rup' [ pos "c" ]);
+        (rup' [ pos "d" ]);
+        (rup' [ neg "a" ]);
+        (rup' []) ].
+
+Compute (rupProofCheckerRevFirst  anton_tseitinExample13).
+Compute (rupProofCheckerUnsatRevFirst  anton_tseitinExample13).
+
+
+
+
+(*
+
+Testing
+
+Definition anton_tseitinExample13a : RupProof :=
+  rev [ (ass' [ (neg "a" ) ; pos "b" ]);
+        (ass' [ (neg "b" ) ; pos "c" ]);
+        (ass' [ (neg "c" ) ; pos "d" ]) ;
+        (ass' [ neg "a" ; neg "d" ]);
+        (ass' [ pos "a" ; pos "b" ]);
+        (ass' [ neg "d" ; pos "a" ]);
+        (rup' [ pos "b" ]);
+        (rup' [ pos "c" ]);
+        (rup' [ pos "d" ]);
+        (rup' [ neg "a" ])].
+
+
+
+
+Compute (rupProofChecker  anton_tseitinExample13a).
+Compute (rupProof2Assumptions anton_tseitinExample13a).
+Compute (rupProof2Conclusions anton_tseitinExample13a).
+Compute (RUP_Checker (rupProof2Assumptions anton_tseitinExample13a) []).
+Compute (unitPropagationAndCheck (rupProof2Conclusions anton_tseitinExample13a)).
+Compute (iteratePropagator 0 (splitClauses (rupProof2Conclusions anton_tseitinExample13a))).
+
+ *)
+
+
+(*  Functions needed for the full checker which  only uses the rupProofChecker
+ *)
+
+
+Inductive proofStep : Type :=
+| Tseitin' : Clause -> proofStep
+| Rup' : Clause -> proofStep
+| Assumption' : Clause -> proofStep
+| Deletion' : Clause -> proofStep.
+
+Fixpoint appendFor (f g : Formula) : Formula :=
+  match f with
+  | [] => g
+  | (c :: f1) => c :: (appendFor f1 g)
+  end.
+
+Fixpoint removeClauseFromFor (c : Clause) (f : Formula) : Formula :=
+  match f with
+  | [] => []
+  | hd :: tl =>
+      let new_formula := removeClauseFromFor c tl in
+      if clause_eqb c hd then new_formula
+      else hd :: new_formula
+  end.
+
+
+Fixpoint checkProof (p : list proofStep) (f : Formula) : bool * option proofStep :=
+  match p with
+  | [] => (true, None)
+  | (step :: ps) =>
+    match step with
+     | Tseitin' c => checkProof ps (appendFor f  (c :: []))
+     | Rup' c =>
+       match RUP_Checker f c with
+        | true => checkProof ps (appendFor f (c ::  []))
+        | false => (false, (Some step))
+       end
+    | Assumption' a => checkProof ps (appendFor f (a :: []))
+    | Deletion' c => checkProof ps (removeClauseFromFor c f)
+    end
+end.
+
+
+
+
+
+
+Require Extraction.
+
+Extraction "RupProofChecker"  rupProofChecker checkProof proofStep rupProofCheckerRevFirst rupProofCheckerUnsatRevFirst rupProof2ConclusionsRevFirst rupProof2AssumptionsRevFirst.

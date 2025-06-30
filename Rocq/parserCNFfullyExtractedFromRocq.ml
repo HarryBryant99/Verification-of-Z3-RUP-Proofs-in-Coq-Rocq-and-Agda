@@ -1,4 +1,4 @@
-open Rupchecker
+open RupProofChecker
 
 exception SkipLine
 
@@ -13,7 +13,7 @@ let ascii_of_char c =
  | _ -> failwith "Invalid ASCII conversion"
 
 (* Convert OCaml string to custom string type *)
-let rec custom_string_of_string s =
+let custom_string_of_string s =
  let len = String.length s in
  let rec aux i =
  if i >= len then EmptyString
@@ -24,11 +24,11 @@ let rec custom_string_of_string s =
 (* Convert OCaml list to custom list type *)
 let rec to_rup_list lst =
  match lst with
- | l when List.length l = 0 -> Rupchecker.Nil
+ | l when List.length l = 0 -> RupProofChecker.Nil
  | _ ->
  let hd = List.hd lst in
  let tl = List.tl lst in
- Rupchecker.Cons (hd, to_rup_list tl)
+ RupProofChecker.Cons (hd, to_rup_list tl)
 
 
 
@@ -42,20 +42,23 @@ let parse_literal s : literal =
  Pos (custom_string_of_string s)
 
 let split_top_level_commas s =
- let len = String.length s in
- let rec aux i depth acc current =
- if i >= len then
- List.rev (String.concat "" (List.rev current) :: acc)
- else
- let c = s.[i] in
- match c with
- | '(' -> aux (i + 1) (depth + 1) acc (String.make 1 c :: current)
- | ')' -> aux (i + 1) (depth - 1) acc (String.make 1 c :: current)
- | ',' when depth = 0 ->
- aux (i + 1) depth (String.concat "" (List.rev current) :: acc) []
- | _ -> aux (i + 1) depth acc (String.make 1 c :: current)
- in
- aux 0 0 [] []
+  let len = String.length s in
+  (* special case  s = "" *)
+  if len  = 0 then []
+  else
+    let rec aux i depth acc current =
+    if i >= len then
+    List.rev (String.concat "" (List.rev current) :: acc)
+    else
+    let c = s.[i] in
+    match c with
+    | '(' -> aux (i + 1) (depth + 1) acc (String.make 1 c :: current)
+    | ')' -> aux (i + 1) (depth - 1) acc (String.make 1 c :: current)
+    | ',' when depth = 0 ->
+    aux (i + 1) depth (String.concat "" (List.rev current) :: acc) []
+    | _ -> aux (i + 1) depth acc (String.make 1 c :: current)
+    in
+    aux 0 0 [] []
 
 let parse_clause s : clause =
  let s = String.trim s in
@@ -64,7 +67,7 @@ let parse_clause s : clause =
  to_rup_list (List.map parse_literal parts)
 
 
- let parse_step line : proofStep =
+let parse_step line : rupProofStep =
   let line = String.trim line in
   if line = "" || line.[0] = '(' then raise SkipLine
   else
@@ -98,21 +101,17 @@ let parse_clause s : clause =
       in
 
       match String.lowercase_ascii kind with
-      | "tseitin" -> Tseitin clause
-      | "rup" -> Rup clause
-      | "assumption" -> Assumption clause
-      | "deletion" -> Deletion clause
+      | "tseitin" -> raise SkipLine (* -> Tseitin clause *)
+      | "rup" -> Rup' clause
+      | "assumption" -> Ass' clause
+      | "deletion" -> raise SkipLine (* -> Deletion clause *)
       | _ -> raise SkipLine
     with
     | Not_found | Invalid_argument _ -> raise SkipLine
 
- 
 
- let parse_file filename : proofStep Rupchecker.list =
-  let chan = open_in filename in
-  let file_content = really_input_string chan (in_channel_length chan) in
-  close_in chan;
 
+let parse_string file_content : rupProofStep RupProofChecker.list =
   let keywords = ["tseitin"; "rup"; "assumption"; "deletion"] in
 
   let is_step_start line =
@@ -140,24 +139,26 @@ let parse_clause s : clause =
   let parsed_steps =
     let counter = ref 0 in
     List.fold_left (fun acc step_str ->
-      try
+        (*      try *)
         let step = parse_step step_str in
         incr counter;
         if !counter mod 10000 = 0 then
           Printf.printf "Parsed %d steps...\n%!" !counter;
         step :: acc
-      with SkipLine -> acc
+        (* with SkipLine -> acc *)
     ) [] step_strings
-  in
-  
+  in to_rup_list (List.rev parsed_steps)
 
-  to_rup_list (List.rev parsed_steps)
-
+let parse_file filename : rupProofStep RupProofChecker.list =
+  let chan = open_in filename in
+  let file_content = really_input_string chan (in_channel_length chan) in
+  close_in chan;
+  parse_string file_content
 
 
 let rec ocaml_list_of_rup_list = function
- | Rupchecker.Nil -> []
- | Rupchecker.Cons (x, xs) -> x :: ocaml_list_of_rup_list xs
+ | RupProofChecker.Nil -> []
+ | RupProofChecker.Cons (x, xs) -> x :: ocaml_list_of_rup_list xs
 
 (* Convert Coq ascii back to a character *)
 let char_of_ascii (Ascii (b0, b1, b2, b3, b4, b5, b6, b7)) =
@@ -191,20 +192,20 @@ let string_of_clause clause =
 
 let rec print_clauses clauses =
  match clauses with
- | Rupchecker.Nil -> ()
- | Rupchecker.Cons (clause, rest) ->
+ | RupProofChecker.Nil -> ()
+ | RupProofChecker.Cons (clause, rest) ->
  print_endline (string_of_clause clause);
  print_clauses rest
- 
+
 let string_of_proofstep = function
- | Tseitin clause -> "tseitin " ^ string_of_clause clause
- | Rup clause -> "rup " ^ string_of_clause clause
- | Assumption clause -> "assumption " ^ string_of_clause clause
- | Deletion clause -> "deletion " ^ string_of_clause clause
- 
+  (* | Tseitin clause -> "tseitin " ^ string_of_clause clause *)
+ | Rup' clause -> "rup " ^ string_of_clause clause
+ | Ass' clause -> "assumption " ^ string_of_clause clause
+(* | Deletion clause -> "deletion " ^ string_of_clause clause *)
+
  let rec string_of_preproof = function
- | Rupchecker.Nil -> ""
- | Rupchecker.Cons (step, rest) ->
+ | RupProofChecker.Nil -> ""
+ | RupProofChecker.Cons (step, rest) ->
  string_of_proofstep step ^ "\n" ^ string_of_preproof rest
 
 (*
@@ -212,21 +213,72 @@ let proof = parse_file "test_p.txt"
 let () = print_string (string_of_preproof proof)
 *)
 
+let head l =
+  match l with
+  | RupProofChecker.Nil ->  RupProofChecker.Nil
+  | RupProofChecker.Cons(hd,_) -> hd
+
+
+let tail l =
+  match l with
+  | RupProofChecker.Nil ->  RupProofChecker.Nil
+  | RupProofChecker.Cons(_,tl) -> tl
+
+
+let proofCheckerProof proof =
+ print_endline "Proof = ";
+ print_endline (string_of_preproof proof);
+ print_endline "Assumptions = ";
+ print_clauses (rupProof2AssumptionsRevFirst proof);
+ print_endline "";
+ print_endline "Conclusions = ";
+ print_clauses (rupProof2ConclusionsRevFirst proof);
+ print_endline "";
+ begin
+ let result = rupProofCheckerUnsatRevFirst proof in
+ match result with
+ | True ->
+   print_endline "Proof is valid proof of Unsat."
+ | False ->
+   print_endline "Proof is invalid proof of Unsat."
+ end;
+ let result1 = rupProofCheckerRevFirst proof in
+ match result1 with
+ | True ->
+   print_endline "Proof is valid proof from Assumptions to Conclusions."
+ | False ->
+   print_endline "Proof is invalid proof from Assumptions to Conclusions."
+
+let proofCheckerString str =
+  try
+    let proof = parse_string str in
+    proofCheckerProof proof
+  with SkipLine -> print_endline "Parsing Failed, one possible reason are tseitin or delete proof steps"
+
+
+let proofCheckerFile filename =
+  try
+  let proof = parse_file filename in
+  proofCheckerProof proof
+  with SkipLine -> print_endline "Parsing Failed, one possible reason are tseitin or delete proof steps"
+
+
 let () =
  if Array.length Sys.argv < 2 then
  print_endline "Usage: ./your_program "
  else
- let filename = Sys.argv.(1) in
+   let filename = Sys.argv.(1) in
+   proofCheckerFile filename
+
+(*
  let proof = parse_file filename in
- let initial_formula = Rupchecker.Nil in
+ (* let initial_formula = RupProofChecker.Nil in *)
  (*let p = print_string (string_of_preproof proof) in*)
- let p =  print_endline "Reading Complete." in
- let result = checkProof proof initial_formula in
+ (* ANTON let p =  print_endline "Reading Complete." in*)
+ let result = rupProofCheckerUnsat proof in
  match result with
- | Pair (True, _) ->
- print_endline "Proof is valid."
- | Pair (False, Some step) ->
- print_endline "Proof is invalid. Failed at step:";
- print_endline (string_of_proofstep step)
- | Pair (False, None) ->
- print_endline "Proof is invalid, but no failing step was returned."
+ | True ->
+   print_endline "Proof is valid."
+ | False ->
+   print_endline "Proof is invalid."
+*)

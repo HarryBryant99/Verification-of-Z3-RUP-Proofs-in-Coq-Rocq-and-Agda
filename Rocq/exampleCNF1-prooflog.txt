@@ -1,0 +1,5 @@
+assumption [] [a, b, c]
+assumption [] [Not(a)]
+assumption [] [Not(b)]
+assumption [] [Not(c)]
+rup [] []
