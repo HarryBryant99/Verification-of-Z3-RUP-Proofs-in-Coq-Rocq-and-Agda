@@ -2,7 +2,8 @@
 This git repository contains
 - in
   [link](agdaCode/vers1Types2025Workshop/)
-  the Agda code used in the short article Harry Bryant, Andrew Lawrence, Monika Seisenberger, and Anton Setzer: Verifying Z3 RUP proofs with the interactive theorem provers Coq/Rocq and Agda which appeared in the abstracts of [Types 2025](https://msp.cis.strath.ac.uk/types2025/)
+  the Agda code used in the short article:
+  Harry Bryant, Andrew Lawrence, Monika Seisenberger, and Anton Setzer: Verifying Z3 RUP proofs with the interactive theorem provers Coq/Rocq and Agda, which appeared in the abstracts of TYPES 2025. [Types 2025](https://msp.cis.strath.ac.uk/types2025/)
 - In
   [link](agdaCode/vers1Types2025Workshop/html/)
   an html version of the Agda code
