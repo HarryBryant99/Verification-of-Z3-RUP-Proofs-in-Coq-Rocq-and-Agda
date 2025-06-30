@@ -1,3 +1,5 @@
+;; Based on the track plan of Romney Sands station on the Romney, Hythe & Dymchurch Railway
+
 ;; Define signals for the tracks
 (declare-fun s0 () Bool)  ; Signal for A to B
 (declare-fun s1 () Bool)  ; Signal for B to A
