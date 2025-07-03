@@ -47,6 +47,10 @@ UnSatCurrentProof tt : UnSat (ZProof2Assumption currentProof)
 However don't evaluate it to normal form, that might be too big.
 But you can use it as a proof of the underlying Sat problem
 
+Note: The current implementation does not approve optimised tseitin steps where 
+the conclusion is a subset of the antecedent because one or more of the literals 
+in the antecedent is already false by an exciting unit clause.
+
 Example
 ~~~~~~~
 An example is  the smt2 file
