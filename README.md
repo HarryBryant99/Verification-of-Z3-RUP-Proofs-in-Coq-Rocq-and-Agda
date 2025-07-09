@@ -6,9 +6,15 @@ This git repository contains
   Harry Bryant, Andrew Lawrence, Monika Seisenberger, and Anton Setzer: Verifying Z3 RUP proofs with the interactive theorem provers Coq/Rocq and Agda, which appeared in the abstracts of TYPES 2025. [Types 2025](https://msp.cis.strath.ac.uk/types2025/)
 - In
   [link](agdaCode/vers1Types2025Workshop/html/)
-  an html version of the Agda code.
+  an html version 1 of the Agda code.
   In order to view it download that directory and load from a webbrowser the file
   [link](agdaCode/vers1Types2025Workshop/html/loadAll.html)
+  which loads the respective agda files
+- In
+  [link](agdaCode/vers2/agdaCode/html)
+  an html version 2 of the Agda code which includes full SAT proof checking.
+  In order to view it download that directory and load from a webbrowser the file
+  [link](agdaCode/vers2/agdaCode/html/loadAll.html)
   which loads the respective agda files
 - In
   [link](RailwayCaseStudy/)
