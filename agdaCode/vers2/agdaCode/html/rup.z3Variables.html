@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>rup.z3Variables</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Keyword">module</a> <a id="8" href="rup.z3Variables.html" class="Module">rup.z3Variables</a> <a id="24" class="Keyword">where</a>
+
+<a id="31" class="Keyword">open</a> <a id="36" class="Keyword">import</a> <a id="43" href="Data.String.html" class="Module">Data.String</a>
+<a id="55" class="Keyword">open</a> <a id="60" class="Keyword">import</a> <a id="67" href="lib.boolLib.html" class="Module">lib.boolLib</a>
+<a id="79" class="Keyword">open</a> <a id="84" class="Keyword">import</a> <a id="91" href="lib.natLibBase.html" class="Module">lib.natLibBase</a>
+<a id="106" class="Keyword">open</a> <a id="111" class="Keyword">import</a> <a id="118" href="lib.natLib.html" class="Module">lib.natLib</a>
+<a id="129" class="Keyword">open</a> <a id="134" class="Keyword">import</a> <a id="141" href="lib.eqLib.html" class="Module">lib.eqLib</a>
+<a id="151" class="Keyword">open</a> <a id="156" class="Keyword">import</a> <a id="163" href="lib.listLib.html" class="Module">lib.listLib</a>
+<a id="175" class="Keyword">open</a> <a id="180" class="Keyword">import</a> <a id="187" href="lib.listLibAny.html" class="Module">lib.listLibAny</a>
+<a id="202" class="Keyword">open</a> <a id="207" class="Keyword">import</a> <a id="214" href="lib.stringLib.html" class="Module">lib.stringLib</a>
+
+
+
+<a id="ZVar"></a><a id="231" href="rup.z3Variables.html#231" class="Function">ZVar</a> <a id="236" class="Symbol">:</a> <a id="238" href="Agda.Primitive.html#388" class="Primitive">Set</a>
+<a id="242" href="rup.z3Variables.html#231" class="Function">ZVar</a> <a id="247" class="Symbol">=</a> <a id="249" href="Agda.Builtin.String.html#335" class="Postulate">String</a>
+
+<a id="_==zVar_"></a><a id="257" href="rup.z3Variables.html#257" class="Function Operator">_==zVar_</a> <a id="266" class="Symbol">:</a> <a id="268" href="rup.z3Variables.html#231" class="Function">ZVar</a> <a id="273" class="Symbol">→</a> <a id="275" href="rup.z3Variables.html#231" class="Function">ZVar</a> <a id="280" class="Symbol">→</a> <a id="282" href="Agda.Builtin.Bool.html#173" class="Datatype">Bool</a>
+<a id="287" href="rup.z3Variables.html#257" class="Function Operator">_==zVar_</a> <a id="296" class="Symbol">=</a>  <a id="299" href="lib.stringLib.html#580" class="Function Operator">_==str_</a>
+
+<a id="eqZVarTo=="></a><a id="308" href="rup.z3Variables.html#308" class="Function">eqZVarTo==</a> <a id="319" class="Symbol">:</a> <a id="321" class="Symbol">(</a><a id="322" href="rup.z3Variables.html#322" class="Bound">n</a> <a id="324" href="rup.z3Variables.html#324" class="Bound">m</a> <a id="326" class="Symbol">:</a> <a id="328" href="rup.z3Variables.html#231" class="Function">ZVar</a><a id="332" class="Symbol">)</a> <a id="334" class="Symbol">→</a> <a id="336" href="lib.boolLib.html#480" class="Function">atom</a> <a id="341" class="Symbol">(</a><a id="342" href="rup.z3Variables.html#322" class="Bound">n</a> <a id="344" href="rup.z3Variables.html#257" class="Function Operator">==zVar</a> <a id="351" href="rup.z3Variables.html#324" class="Bound">m</a><a id="352" class="Symbol">)</a> <a id="354" class="Symbol">→</a> <a id="356" href="rup.z3Variables.html#322" class="Bound">n</a> <a id="358" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="360" href="rup.z3Variables.html#324" class="Bound">m</a>
+<a id="362" href="rup.z3Variables.html#308" class="Function">eqZVarTo==</a> <a id="373" class="Symbol">=</a> <a id="375" href="lib.stringLib.html#917" class="Function">==strTo≡</a>
+</pre></body></html>
