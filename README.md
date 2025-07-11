@@ -27,6 +27,8 @@ This git repository contains
   This tool generates an extracted checker for formulas in CNF and a proof checker for propositional formulae. In the case of RUP, it uses the extracted RUP checker.
 - In
   [createProofLogs/](createProofLogs/) scripts for generating the proof logs.
+- In
+  OCaml
 
 # Note on Operating System Used
 This code has been developed using Linux
