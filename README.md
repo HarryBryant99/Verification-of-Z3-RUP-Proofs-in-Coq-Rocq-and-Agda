@@ -28,7 +28,9 @@ This git repository contains
 - In
   [createProofLogs/](createProofLogs/) scripts for generating the proof logs.
 - In
-  [OCaml](https://github.com/HarryBryant99/Verification-of-Z3-RUP-Proofs-in-Coq-Rocq-and-Agda/tree/809f89e22c22cee607fcdef3ad49b192c350bb4a/OCaml)
+  [OCaml/](https://github.com/HarryBryant99/Verification-of-Z3-RUP-Proofs-in-Coq-Rocq-and-Agda/tree/809f89e22c22cee607fcdef3ad49b192c350bb4a/OCaml)<br>
+  OCaml translation of the python code, part of the Agda version 2 code, that checks whether Tseitin steps match their revelant pattern.
+
 
 # Note on Operating System Used
 This code has been developed using Linux
