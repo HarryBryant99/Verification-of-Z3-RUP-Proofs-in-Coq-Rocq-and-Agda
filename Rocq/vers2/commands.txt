@@ -1,0 +1,13 @@
+ocamlc -c rupchecker_z3_datatype.mli
+ocamlc -c rupchecker_z3_datatype.ml
+
+ocamlyacc parser.mly
+ocamlc -c parser.mli
+ocamllex lexer.mll
+ocamlc -c parser.ml
+ocamlc -c lexer.ml
+
+ocamlc -c tseitincheck.ml
+
+ocamlc -c main.ml
+ocamlc -o satproofchecker rupchecker_z3_datatype.cmo tseitincheck.cmo parser.cmo lexer.cmo main.cmo
