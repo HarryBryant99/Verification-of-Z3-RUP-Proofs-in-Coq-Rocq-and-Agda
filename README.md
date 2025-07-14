@@ -23,10 +23,10 @@ This git repository contains
   [agdaCode/vers2/](agdaCode/vers2/)<br>
   a checker for Z3 proofs of propositional formulas
 - In
-  [Rocq/](Rocq/vers1) a RUP checker developed in Rocq.<br>
+  [Rocq/vers1](Rocq/vers1) a RUP checker developed in Rocq.<br>
   This tool generates an extracted checker for formulas in CNF and a proof checker for propositional formulae. In the case of RUP, it uses the extracted RUP checker.
 - In
-  [Rocq/](Rocq/vers2) a RUP checker developed in Rocq with a non-verified Tseitin checker.<br>
+  [Rocq/vers2](Rocq/vers2) a RUP checker developed in Rocq with a non-verified Tseitin checker.<br>
   This tool generates an extracted checker for formulas in CNF and a proof checker for propositional formulae. In the case of RUP, it uses the extracted RUP checker.
   In case of non-CNF Tseitin steps it uses an OCaml checker.
 - In
