@@ -403,4 +403,3 @@ let tseitin_checker (f_list : clause) (g_list : clause) : bool =
 
     (* Try all cases *)
     List.exists (fun case -> case ()) [case1; case2; case3; case4; case5; case6; case7; case8]
-
