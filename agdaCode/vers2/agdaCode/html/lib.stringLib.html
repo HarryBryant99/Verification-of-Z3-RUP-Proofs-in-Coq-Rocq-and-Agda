@@ -1,0 +1,65 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>lib.stringLib</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Keyword">module</a> <a id="8" href="lib.stringLib.html" class="Module">lib.stringLib</a> <a id="22" class="Keyword">where</a>
+
+<a id="29" class="Keyword">open</a> <a id="34" class="Keyword">import</a> <a id="41" href="Data.String.html" class="Module">Data.String</a>
+<a id="53" class="Keyword">open</a> <a id="58" class="Keyword">import</a> <a id="65" href="Data.String.Properties.html" class="Module">Data.String.Properties</a>
+<a id="88" class="Keyword">open</a> <a id="93" class="Keyword">import</a> <a id="100" href="Relation.Binary.Definitions.html" class="Module">Relation.Binary.Definitions</a>
+<a id="128" class="Keyword">open</a> <a id="133" class="Keyword">import</a> <a id="140" href="Relation.Nullary.Decidable.Core.html" class="Module">Relation.Nullary.Decidable.Core</a>
+<a id="172" class="Keyword">open</a> <a id="177" class="Keyword">import</a> <a id="184" href="Relation.Nullary.Reflects.html" class="Module">Relation.Nullary.Reflects</a>
+<a id="210" class="Keyword">open</a> <a id="215" class="Keyword">import</a> <a id="222" href="Data.List.Relation.Binary.Pointwise.Properties.html" class="Module">Data.List.Relation.Binary.Pointwise.Properties</a>
+<a id="269" class="Keyword">open</a> <a id="274" class="Keyword">import</a> <a id="281" href="Agda.Builtin.Char.Properties.html" class="Module">Agda.Builtin.Char.Properties</a>
+<a id="310" class="Keyword">open</a> <a id="315" class="Keyword">import</a> <a id="322" href="Relation.Binary.PropositionalEquality.html" class="Module">Relation.Binary.PropositionalEquality</a>
+<a id="360" class="Keyword">open</a> <a id="365" class="Keyword">import</a> <a id="372" href="Agda.Builtin.Char.html" class="Module">Agda.Builtin.Char</a>
+<a id="390" class="Keyword">open</a> <a id="395" class="Keyword">import</a> <a id="402" href="Data.Nat.Properties.html" class="Module">Data.Nat.Properties</a> <a id="422" class="Keyword">hiding</a> <a id="429" class="Symbol">(</a><a id="430" href="Data.Nat.Properties.html#3874" class="Function Operator">_≟_</a> <a id="434" class="Symbol">)</a>
+<a id="436" class="Keyword">open</a> <a id="441" class="Keyword">import</a> <a id="448" href="lib.eqLib.html" class="Module">lib.eqLib</a>
+<a id="458" class="Keyword">open</a> <a id="463" class="Keyword">import</a> <a id="470" href="lib.boolLib.html" class="Module">lib.boolLib</a>
+
+<a id="483" class="Comment">{-
+tmp1 : DecidableEquality String
+tmp1 = _≟_
+
+tmp2 : (x y : String) → Dec (x ≡ y)
+tmp2 = _≟_
+-}</a>
+<a id="_==str_"></a><a id="580" href="lib.stringLib.html#580" class="Function Operator">_==str_</a> <a id="588" class="Symbol">:</a> <a id="590" href="Agda.Builtin.String.html#335" class="Postulate">String</a> <a id="597" class="Symbol">→</a> <a id="599" href="Agda.Builtin.String.html#335" class="Postulate">String</a> <a id="606" class="Symbol">→</a> <a id="608" href="Agda.Builtin.Bool.html#173" class="Datatype">Bool</a>
+<a id="613" href="lib.stringLib.html#613" class="Bound">s</a> <a id="615" href="lib.stringLib.html#580" class="Function Operator">==str</a> <a id="621" href="lib.stringLib.html#621" class="Bound">t</a> <a id="623" class="Symbol">=</a>  <a id="626" class="Symbol">(</a><a id="627" href="lib.stringLib.html#613" class="Bound">s</a> <a id="629" href="Data.String.Properties.html#2733" class="Function Operator">≟</a> <a id="631" href="lib.stringLib.html#621" class="Bound">t</a><a id="632" class="Symbol">)</a> <a id="634" class="Symbol">.</a><a id="635" href="Relation.Nullary.Decidable.Core.html#1927" class="Field">does</a>
+
+<a id="reflects==str"></a><a id="641" href="lib.stringLib.html#641" class="Function">reflects==str</a> <a id="655" class="Symbol">:</a> <a id="657" class="Symbol">(</a><a id="658" href="lib.stringLib.html#658" class="Bound">s</a> <a id="660" href="lib.stringLib.html#660" class="Bound">t</a> <a id="662" class="Symbol">:</a> <a id="664" href="Agda.Builtin.String.html#335" class="Postulate">String</a><a id="670" class="Symbol">)</a> <a id="672" class="Symbol">→</a> <a id="674" href="Relation.Nullary.Reflects.html#1010" class="Datatype">Reflects</a> <a id="683" class="Symbol">(</a><a id="684" href="lib.stringLib.html#658" class="Bound">s</a> <a id="686" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="688" href="lib.stringLib.html#660" class="Bound">t</a><a id="689" class="Symbol">)</a> <a id="691" class="Symbol">(</a><a id="692" href="lib.stringLib.html#658" class="Bound">s</a> <a id="694" href="lib.stringLib.html#580" class="Function Operator">==str</a> <a id="700" href="lib.stringLib.html#660" class="Bound">t</a><a id="701" class="Symbol">)</a>
+<a id="703" href="lib.stringLib.html#641" class="Function">reflects==str</a> <a id="717" href="lib.stringLib.html#717" class="Bound">s</a> <a id="719" href="lib.stringLib.html#719" class="Bound">t</a> <a id="721" class="Symbol">=</a> <a id="723" class="Symbol">(</a><a id="724" href="lib.stringLib.html#717" class="Bound">s</a> <a id="726" href="Data.String.Properties.html#2733" class="Function Operator">≟</a> <a id="728" href="lib.stringLib.html#719" class="Bound">t</a><a id="729" class="Symbol">)</a> <a id="731" class="Symbol">.</a><a id="732" href="Relation.Nullary.Decidable.Core.html#1944" class="Field">proof</a>
+
+<a id="fromReflectsTrue"></a><a id="739" href="lib.stringLib.html#739" class="Function">fromReflectsTrue</a> <a id="756" class="Symbol">:</a> <a id="758" class="Symbol">{</a><a id="759" href="lib.stringLib.html#759" class="Bound">A</a> <a id="761" class="Symbol">:</a> <a id="763" href="Agda.Primitive.html#388" class="Primitive">Set</a><a id="766" class="Symbol">}</a> <a id="768" class="Symbol">→</a> <a id="770" href="Relation.Nullary.Reflects.html#1010" class="Datatype">Reflects</a> <a id="779" href="lib.stringLib.html#759" class="Bound">A</a> <a id="781" href="Agda.Builtin.Bool.html#198" class="InductiveConstructor">true</a> <a id="786" class="Symbol">→</a> <a id="788" href="lib.stringLib.html#759" class="Bound">A</a>
+<a id="790" href="lib.stringLib.html#739" class="Function">fromReflectsTrue</a> <a id="807" class="Symbol">(</a><a id="808" href="Relation.Nullary.Reflects.html#1054" class="InductiveConstructor">ofʸ</a> <a id="812" href="lib.stringLib.html#812" class="Bound">a</a><a id="813" class="Symbol">)</a> <a id="815" class="Symbol">=</a> <a id="817" href="lib.stringLib.html#812" class="Bound">a</a>
+
+<a id="fromReflects"></a><a id="820" href="lib.stringLib.html#820" class="Function">fromReflects</a> <a id="833" class="Symbol">:</a> <a id="835" class="Symbol">{</a><a id="836" href="lib.stringLib.html#836" class="Bound">A</a> <a id="838" class="Symbol">:</a> <a id="840" href="Agda.Primitive.html#388" class="Primitive">Set</a><a id="843" class="Symbol">}(</a><a id="845" href="lib.stringLib.html#845" class="Bound">b</a> <a id="847" class="Symbol">:</a> <a id="849" href="Agda.Builtin.Bool.html#173" class="Datatype">Bool</a><a id="853" class="Symbol">)</a> <a id="855" class="Symbol">→</a> <a id="857" href="lib.boolLib.html#212" class="Function">T</a> <a id="859" href="lib.stringLib.html#845" class="Bound">b</a> <a id="861" class="Symbol">→</a> <a id="863" href="Relation.Nullary.Reflects.html#1010" class="Datatype">Reflects</a> <a id="872" href="lib.stringLib.html#836" class="Bound">A</a> <a id="874" href="lib.stringLib.html#845" class="Bound">b</a> <a id="876" class="Symbol">→</a> <a id="878" href="lib.stringLib.html#836" class="Bound">A</a>
+<a id="880" href="lib.stringLib.html#820" class="Function">fromReflects</a> <a id="893" class="Symbol">{</a><a id="894" href="lib.stringLib.html#894" class="Bound">A</a><a id="895" class="Symbol">}</a> <a id="897" href="Agda.Builtin.Bool.html#198" class="InductiveConstructor">true</a> <a id="902" href="lib.stringLib.html#902" class="Bound">x</a> <a id="904" class="Symbol">(</a><a id="905" href="Relation.Nullary.Reflects.html#1054" class="InductiveConstructor">ofʸ</a> <a id="909" href="lib.stringLib.html#909" class="Bound">a</a><a id="910" class="Symbol">)</a> <a id="912" class="Symbol">=</a> <a id="914" href="lib.stringLib.html#909" class="Bound">a</a>
+
+<a id="==strTo≡"></a><a id="917" href="lib.stringLib.html#917" class="Function">==strTo≡</a>  <a id="927" class="Symbol">:</a> <a id="929" class="Symbol">(</a><a id="930" href="lib.stringLib.html#930" class="Bound">s</a> <a id="932" href="lib.stringLib.html#932" class="Bound">t</a> <a id="934" class="Symbol">:</a> <a id="936" href="Agda.Builtin.String.html#335" class="Postulate">String</a><a id="942" class="Symbol">)</a> <a id="944" class="Symbol">→</a> <a id="946" href="lib.boolLib.html#212" class="Function">T</a> <a id="948" class="Symbol">(</a><a id="949" href="lib.stringLib.html#930" class="Bound">s</a> <a id="951" href="lib.stringLib.html#580" class="Function Operator">==str</a> <a id="957" href="lib.stringLib.html#932" class="Bound">t</a><a id="958" class="Symbol">)</a> <a id="960" class="Symbol">→</a> <a id="962" href="lib.stringLib.html#930" class="Bound">s</a> <a id="964" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="966" href="lib.stringLib.html#932" class="Bound">t</a>
+<a id="968" href="lib.stringLib.html#917" class="Function">==strTo≡</a> <a id="977" href="lib.stringLib.html#977" class="Bound">s</a> <a id="979" href="lib.stringLib.html#979" class="Bound">t</a> <a id="981" href="lib.stringLib.html#981" class="Bound">p</a>  <a id="984" class="Symbol">=</a> <a id="986" href="lib.stringLib.html#820" class="Function">fromReflects</a> <a id="999" class="Symbol">(</a><a id="1000" href="lib.stringLib.html#977" class="Bound">s</a> <a id="1002" href="lib.stringLib.html#580" class="Function Operator">==str</a> <a id="1008" href="lib.stringLib.html#979" class="Bound">t</a><a id="1009" class="Symbol">)</a> <a id="1011" href="lib.stringLib.html#981" class="Bound">p</a> <a id="1013" class="Symbol">((</a><a id="1015" href="lib.stringLib.html#977" class="Bound">s</a> <a id="1017" href="Data.String.Properties.html#2733" class="Function Operator">≟</a> <a id="1019" href="lib.stringLib.html#979" class="Bound">t</a><a id="1020" class="Symbol">)</a> <a id="1022" class="Symbol">.</a><a id="1023" href="Relation.Nullary.Decidable.Core.html#1944" class="Field">proof</a><a id="1028" class="Symbol">)</a>
+
+
+<a id="1032" class="Comment">{-
+infix 4 _==_
+_==_ : String → String → Bool
+s₁ == s₂ = isYes (s₁ ≟ s₂)
+
+_≟_ : DecidableEquality String
+x ≟ y = map′ ≈⇒≡ ≈-reflexive $ x ≈? y
+
+DecidableEquality : (A : Set a) → Set _
+DecidableEquality A = Decidable {A = A} _≡_
+
+Decidable : REL A B ℓ → Set _
+Decidable _∼_ = ∀ x y → Dec (x ∼ y)
+
+
+record Dec (A : Set a) : Set a where
+  constructor _because_
+  field
+    does  : Bool
+    proof : Reflects A does
+
+data Reflects (A : Set a) : Bool → Set a where
+  ofʸ : ( a :   A) → Reflects A true
+  ofⁿ : (¬a : ¬ A) → Reflects A false
+-}</a>
+</pre></body></html>

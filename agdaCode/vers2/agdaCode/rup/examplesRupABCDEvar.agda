@@ -18,31 +18,31 @@ open import rup.rupChecker
 open import rup.rupProof
 open import rup.uResTreeProofs
 
-monikaPAss : List Clause
+monikaPAss : List RClause
 monikaPAss = (pos a' ∷ pos b' ∷ []) ∷
              (pos a' ∷ neg b' ∷ []) ∷
              (neg a' ∷ pos b' ∷ []) ∷
              (neg a' ∷ neg b' ∷ []) ∷ []
 
-monikaPRup1 : Clause
+monikaPRup1 : RClause
 monikaPRup1 = (pos b' ∷ [])
 
-monikaPAssStep1 : List Clause
+monikaPAssStep1 : List RClause
 monikaPAssStep1 = monikaPRup1 ∷ monikaPAss
 
-monikaPRup2 : Clause
+monikaPRup2 : RClause
 monikaPRup2 = (pos a' ∷ [])
 
-monikaPAssStep2 : List Clause
+monikaPAssStep2 : List RClause
 monikaPAssStep2 = monikaPRup2 ∷ monikaPAssStep1
 
-monikaPRup3 : Clause
+monikaPRup3 : RClause
 monikaPRup3 = []
 
 rupCheckMonikaPStep1 : FinalRes
 rupCheckMonikaPStep1  = checkOneRupWithInfo monikaPAss monikaPRup1
 
-rupProof1 : UPrfOfFinalRes (createFullRupClause monikaPAss monikaPRup1) (checkOneRupWithInfo monikaPAss monikaPRup1)
+rupProof1 : UPrfOfFinalRes (createFullRupRClause monikaPAss monikaPRup1) (checkOneRupWithInfo monikaPAss monikaPRup1)
 rupProof1 = prfChecOneRupWithInfo monikaPAss monikaPRup1
 
 
@@ -64,8 +64,8 @@ rupCheckMonikaPStep3 : FinalRes
 rupCheckMonikaPStep3  = checkOneRupWithInfo monikaPAssStep2 monikaPRup3
 
 -- Initial clause
-fullRupClauseMonikaPStep1 : List Clause
-fullRupClauseMonikaPStep1 = createFullRupClause monikaPAss monikaPRup1
+fullRupClauseMonikaPStep1 : List RClause
+fullRupClauseMonikaPStep1 = createFullRupRClause monikaPAss monikaPRup1
 
 {- result
 (pos a' ∷ pos b' ∷ []) ∷
@@ -112,13 +112,13 @@ success
 -}
 
 
-monikaPFullRupProof : Formula
+monikaPFullRupProof : RFor
 monikaPFullRupProof = monikaPRup1 ∷ monikaPRup2 ∷ monikaPRup3 ∷ []
 
 corMonikaPFullRupProof : Bool
 corMonikaPFullRupProof = rupProof monikaPAss monikaPFullRupProof
 
-monikaPEntails : EntailsFor monikaPAss monikaPFullRupProof
+monikaPEntails : EntailsRFor monikaPAss monikaPFullRupProof
 monikaPEntails = rupProofEntails monikaPAss monikaPFullRupProof tt
 
 corMonikaPFullRupProofUnsat : Bool
@@ -130,7 +130,7 @@ monikaPUnSat = rupProofOfUnsatUnsat monikaPAss monikaPFullRupProof tt
 
 {- ####   monikaP with one Mistake ### -}
 
-monikaPAssWithMistake : List Clause
+monikaPAssWithMistake : List RClause
 monikaPAssWithMistake = (pos a' ∷ pos b' ∷ []) ∷
              (pos a' ∷ neg b' ∷ []) ∷
              (neg a' ∷ neg b' ∷ []) ∷
@@ -145,8 +145,8 @@ rupCheckMonikaPWithMistake : FinalRes
 rupCheckMonikaPWithMistake = checkOneRupWithInfo monikaPAssWithMistake monikaPRup1
 
 -- Initial clause
-fullRupClauseMonikaPWithMistake : List Clause
-fullRupClauseMonikaPWithMistake = createFullRupClause monikaPAssWithMistake monikaPRup1
+fullRupClauseMonikaPWithMistake : List RClause
+fullRupClauseMonikaPWithMistake = createFullRupRClause monikaPAssWithMistake monikaPRup1
 
 -- initial config
 initialConfigMonikaPWithMistake : InitialConfig
