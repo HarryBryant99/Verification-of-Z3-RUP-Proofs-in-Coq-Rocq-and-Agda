@@ -34,6 +34,9 @@ This git repository contains
 - In
   [OCaml/vers1](OCaml/vers1)<br>
   OCaml translation of the python code, part of the Agda version 2 code, that checks whether Tseitin steps match their revelant pattern.
+- In
+  [OCaml/vers2](OCaml/vers2)<br>
+  Extracted Z3 SAT checker using the proven code in [Rocq/vers2](Rocq/vers2)
 
 
 # Note on Operating System Used
