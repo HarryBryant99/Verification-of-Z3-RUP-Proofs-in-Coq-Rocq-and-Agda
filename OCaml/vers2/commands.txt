@@ -1,0 +1,14 @@
+
+ocamlc -c proven_sat_checker.ml
+ocamlc -c types.ml
+
+ocamlyacc parser.mly
+ocamlc -c parser.mli
+ocamllex lexer.mll
+ocamlc -c parser.ml
+ocamlc -c lexer.ml
+
+ocamlc -c step_converter.ml
+
+ocamlc -c main.ml
+ocamlc -o z3satchecker proven_sat_checker.cmo types.cmo step_converter.cmo parser.cmo lexer.cmo main.cmo
