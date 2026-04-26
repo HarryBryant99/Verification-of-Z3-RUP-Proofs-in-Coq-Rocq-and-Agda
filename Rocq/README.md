@@ -1,4 +1,4 @@
 - Version 1: The SAT Checker with no Tseitin Checking
-- Version 2: The SAT Checker combined with the OCaml Tseitin Checker in [OCaml/](https://github.com/HarryBryant99/Verification-of-Z3-RUP-Proofs-in-Coq-Rocq-and-Agda/tree/809f89e22c22cee607fcdef3ad49b192c350bb4a/OCaml/vers1)
-- Version 3: The Full SAT Checker with Reduced Tseitin steps combined with the OCaml Tseitin Checker in [OCaml/](https://github.com/HarryBryant99/Verification-of-Z3-RUP-Proofs-in-Coq-Rocq-and-Agda/tree/809f89e22c22cee607fcdef3ad49b192c350bb4a/OCaml/vers2)
+- Version 2: The SAT Checker combined with the OCaml Tseitin Checker in [OCaml/](../OCaml/vers1)
+- Version 3: The Full SAT Checker with Reduced Tseitin steps combined with the OCaml Tseitin Checker in [OCaml/](../OCaml/vers2)
 -  Version 4: The Full SAT Checker expanded to Farkas inequalities for SMT ERTMS proofs. This is combined with the extraced OCaml Farkas Checker in [OCaml/](../OCaml/vers3)
