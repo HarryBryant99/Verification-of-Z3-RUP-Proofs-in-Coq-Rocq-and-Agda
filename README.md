@@ -18,7 +18,7 @@ This git repository contains
   from which you can load the respective files by clicking on the import statements.
 - In
   [RailwayCaseStudy/](RailwayCaseStudy/)<br>
-  an example of a railway with Z3 code for verificatoin
+  an example of a railway with Z3 code for verification
 - In
   [agdaCode/vers2/](agdaCode/vers2/)<br>
   a checker for Z3 proofs of propositional formulas
