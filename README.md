@@ -30,6 +30,8 @@ This git repository contains
   This tool generates an extracted checker for formulas in CNF and a proof checker for propositional formulae. In the case of RUP, it uses the extracted RUP checker.
   In case of non-CNF Tseitin steps it uses an OCaml checker.
 - In
+  [Rocq/vers2](Rocq/vers4) a Z3 proof checker that is fully verified for both SAT proofs and inequality proofs with Farkas' lemma.
+- In
   [createProofLogs/](createProofLogs/) scripts for generating the proof logs.
 - In
   [OCaml/vers1](OCaml/vers1)<br>
@@ -37,6 +39,9 @@ This git repository contains
 - In
   [OCaml/vers2](OCaml/vers2)<br>
   Extracted Z3 SAT checker using the proven code in [Rocq/vers3](Rocq/vers3)
+- In
+  [OCaml/vers3](OCaml/vers3)<br>
+  Extracted Z3 checker with Farkas for inequality reasoning using the proven code in [Rocq/vers3](Rocq/vers4)
 
 
 # Note on Operating System Used
