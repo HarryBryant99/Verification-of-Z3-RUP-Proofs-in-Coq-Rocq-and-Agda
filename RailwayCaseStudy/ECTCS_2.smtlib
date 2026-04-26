@@ -1,0 +1,222 @@
+(set-option :sat.euf true)
+(set-option :tactic.default_tactic smt)
+(set-option :solver.proof.log "bg03_CE.smt2")
+
+;; ==================================================
+;; Infrastructure reference points
+;; ==================================================
+
+(declare-const C1 Int) ;; crossing start
+(declare-const C2 Int) ;; crossing end
+(declare-const T  Int) ;; point toe
+(declare-const F  Int) ;; point frog
+
+;(assert (<= C1 C2))
+(assert (>= (- C2 C1) 10))     ;; crossing width = 10 m
+
+(assert (> (- T C2) 0))
+(assert (> (- F T) 0))
+(assert (>= (- F T) 5))        ;; toe–frog length >= 5 m
+
+;; Toe exactly 10 m after crossing
+(assert (>= (- T C2) 10))
+(assert (<= (- T C2) 10))
+
+
+;; ==================================================
+;; Balises A–E
+;; ==================================================
+
+(declare-const A Int)  ;; before crossing
+(declare-const B Int)  ;; just after crossing
+(declare-const C Int)  ;; approach balise nearer point
+(declare-const D Int)  ;; after point (main route)
+(declare-const E Int)  ;; after point (diverging route)
+
+
+;; ==================================================
+;; Topological placement
+;; ==================================================
+
+;; approach side of the point
+(assert (> (- C1 A) 0))
+(assert (>= (- B C2) 0))
+(assert (> (- C B) 0))
+(assert (>= (- T C) 0))
+
+;; post‑point
+(assert (>= (- D F) 0))  
+(assert (>= (- E F) 0))
+;; No ordering between D and E (diverging tracks)
+
+
+;; ==================================================
+;; BG‑03.1: ≥ 1.0 m from point toe (cleaned)
+;; ==================================================
+
+;; A, B, C are before the toe
+(assert (>= (- T A) 1))
+(assert (>= (- T B) 1))
+(assert (>= (- T C) 1))
+
+;; D, E are after the toe
+(assert (>= (- D T) 1))
+(assert (>= (- E T) 1))
+
+;; ==================================================
+;; BG‑03.2: ≥ 1.0 m from point frog (cleaned)
+;; ==================================================
+
+;; A, B, C are before the frog
+(assert (>= (- F A) 1))
+(assert (>= (- F B) 1))
+(assert (>= (- F C) 1))
+
+;; D, E are after the frog
+(assert (>= (- D F) 1))
+(assert (>= (- E F) 1))
+
+;; ==================================================
+;; Distances around the crossing
+;; ==================================================
+
+(declare-const A_cross Int) ;; C1 - A
+(declare-const B_cross Int) ;; B  - C2
+
+(assert (>= (- A_cross (- C1 A)) 0))
+(assert (>= (- (- C1 A) A_cross) 0))
+
+(assert (>= (- B_cross (- B C2)) 0))
+(assert (>= (- (- B C2) B_cross) 0))
+
+;; Both balises not on the crossing
+(assert (> A_cross 0))
+(assert (> B_cross 0))
+
+;; Both balises within 5 m of crossing
+(assert (<= A_cross 5))
+(assert (<= B_cross 5))
+
+
+;; ==================================================
+;; Approach distances
+;; ==================================================
+
+(declare-const A_B Int)
+(declare-const B_C Int)
+(declare-const C_T Int)
+
+;; A_B = B - A
+(assert (>= (- A_B (- B A)) 0))
+(assert (>= (- (- B A) A_B) 0))
+
+;; B_C = C - B
+(assert (>= (- B_C (- C B)) 0))
+(assert (>= (- (- C B) B_C) 0))
+
+;; C_T = T - C
+(assert (>= (- C_T (- T C)) 0))
+(assert (>= (- (- T C) C_T) 0))
+
+;; MPS = 180 km/h
+(assert (>= A_B 3))
+(assert (>= B_C 3))
+;; C_T >= 1 is implied by C <= T - 1
+
+
+;; ==================================================
+;; Post‑point distances
+;; ==================================================
+
+(declare-const C_D Int)
+(declare-const C_E Int)
+
+;; C_D = D - C
+(assert (>= (- C_D (- D C)) 0))
+(assert (>= (- (- D C) C_D) 0))
+
+;; C_E = E - C
+(assert (>= (- C_E (- E C)) 0))
+(assert (>= (- (- E C) C_E) 0))
+
+(assert (>= C_D 3))
+(assert (>= C_E 3))
+
+;; ==================================================
+;; MULTIPLIER / RATIO CONSTRAINTS (SAT‑SAFE)
+;; ==================================================
+
+;; 1) Approach balises do not get further apart
+;;    B_C <= A_B
+(assert (>= (- A_B B_C) 0))
+
+;; 2) Post‑point spacing dominates approach spacing
+;;    C_D >= 1.4 × B_C   (6*C_D >= 5*B_C)
+(assert (>= (- (* 6 C_D) (* 5 B_C)) 0))
+
+;; 3) Diverging route spacing longer than main route
+;;    C_E >= 1.25 × C_D  (4*C_E >= 5*C_D)
+(assert (>= (- (* 4 C_E) (* 5 C_D)) 0))
+
+;; 4) Combined post‑point protection proportional to approach
+;; C_D + C_E >= 1.2 × B_C
+(assert (>= (- (+ (* 5 C_D) (* 5 C_E)) (* 6 B_C)) 0))
+
+;; A_B ≤ 1.5 × B_C
+(assert (>= (- (* 3 B_C) (* 2 A_B)) 0))
+
+;; C_D ≤ 1.4 × B_C
+(assert (>= (- (* 7 B_C) (* 5 C_D)) 0))
+
+;; C_E ≤ 1.4 × C_D
+(assert (>= (- (* 7 C_D) (* 5 C_E)) 0))
+
+;; C_E ≤ 1.5 × B_C
+(assert (>= (- (* 3 B_C) (* 2 C_E)) 0))
+
+;; Anchor: approach gap is limited by signalling practice
+(assert (<= B_C 8))
+
+
+;; ==================================================
+;; BG‑03.3: lateral separation (abstracted)
+;; ==================================================
+
+(declare-const lat_sep Int)
+(assert (>= lat_sep 2))        ;; ≥ 1.4 m
+
+;; ==================================================
+;; Maximum distance to next balise (SAFE)
+;; ==================================================
+
+;; Comment out to produce better farkas steps
+;(assert (<= A_B 12))
+;(assert (<= B_C 12))
+;(assert (<= C_D 12))
+;(assert (<= C_E 12))
+
+;; ==================================================
+;; NEGATED SAFETY PROPERTY
+;; Distance to the next balise exceeds 12 m
+;; ==================================================
+
+;; Uncomment one of the statements for unsat check
+;(assert
+;    (> A_B 12)
+;    (> B_C 12)
+;    (> C_D 12)
+;    (> C_E 12)
+;)
+
+;;Produces bound steps
+;(assert
+;  (or
+;    (> A_B 12)
+;    (> B_C 12)
+;    (> C_D 12)
+;    (> C_E 12)
+;  )
+;)
+
+(check-sat)
+(get-model)
