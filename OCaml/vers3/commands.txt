@@ -13,8 +13,3 @@ ocamlc -c step_converter.ml
 ocamlc -c main.ml
 ocamlc -o z3_farkas_checker proven_checker_farkas_6.cmo types.cmo step_converter.cmo parser.cmo lexer.cmo main.cmo
 
-
-ocamlc -c parser_printer.ml
-
-ocamlc -o parser_printer proven_checker_farkas_6.cmo types.cmo parser.cmo lexer.cmo parser_printer.cmo
-
