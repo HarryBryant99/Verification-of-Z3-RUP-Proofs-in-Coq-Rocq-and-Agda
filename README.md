@@ -1,3 +1,10 @@
+# CASTLE Proof Checker
+Checker for the Assurance of Safety in Track Logic and Environments
+
+Developed for Z3 by Swansea University and Siemens Mobility, for use in the Railway Domain.
+
+----------------------------------------------------------------------------------------------
+
 # Verification-of-Z3-RUP-Proofs-in-Coq-Rocq-and-Agda
 This git repository contains
 - In 
