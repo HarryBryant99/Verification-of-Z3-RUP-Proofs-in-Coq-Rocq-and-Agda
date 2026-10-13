@@ -1,6 +1,8 @@
 # CASTLE Proof Checker
 Checker for the Assurance of Safety in Track Logic and Environments
 
+![Castle logo](/assets/Castle.png "Castle logo")
+
 Developed for Z3 by Swansea University and Siemens Mobility, for use in the Railway Domain.
 
 Written in Rocq, verified and extracted to OCaml for checking Z3 RUP-based proofs.
