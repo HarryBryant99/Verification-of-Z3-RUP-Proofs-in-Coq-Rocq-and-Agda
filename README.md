@@ -7,6 +7,8 @@ Developed for Z3 by Swansea University and Siemens Mobility, for use in the Rail
 
 Written in Rocq, verified and extracted to OCaml for checking Z3 RUP-based proofs.
 
+Latest Version: [OCaml/vers3](OCaml/vers3)<br> extracted from the proven code in [Rocq/vers4](Rocq/vers4)
+
 ----------------------------------------------------------------------------------------------
 
 # Verification-of-Z3-RUP-Proofs-in-Coq-Rocq-and-Agda
@@ -52,7 +54,7 @@ This git repository contains
   Extracted Z3 SAT checker using the proven code in [Rocq/vers3](Rocq/vers3)
 - In
   [OCaml/vers3](OCaml/vers3)<br>
-  Extracted Z3 checker with Farkas for inequality reasoning using the proven code in [Rocq/vers3](Rocq/vers4)
+  Extracted Z3 checker with Farkas for inequality reasoning using the proven code in [Rocq/vers4](Rocq/vers4)
 
 
 # Note on Operating System Used
